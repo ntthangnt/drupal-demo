@@ -1,0 +1,56 @@
+<?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+function batch_insert_users_menu() {
+    $items = array();
+    
+    $items['insert/users'] = array(
+        'title' => 'Insert 2000 user',
+        'description' => 'Create batch API insert about 2000 users',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('batch_insert_users_simple_form'),
+        'access callback' => true
+        
+    )
+}
+
+function batch_insert_users_simple_form() {
+    $form['description'] = array(
+        '#type' => 'markup',
+        '#markup' => t('Insert 2000 user using batch')
+    );
+    
+    $form['batch'] = array(
+        '#type' => 'input',
+        '#title' => 'Insert name user',
+        '#value' => 'user name',
+    );
+    
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => 'Insert',
+    )
+            
+    return $form;        
+}
+
+function batch_insert_users_simple_form_submit($form) {
+    
+    batch_set('batch_insert_users');
+}
+
+function insert_users($form)
+{   
+    $user_name = $form['batch']['#value'];
+    $insert = db_insert('users')
+            ->fields(array(
+                'name' => $user_name
+            ))
+            ->execute();
+}
